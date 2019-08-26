@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    
+    <title>Document</title>
+    <script src="react.js"></script>
+    <script src="react-dom.js"></script>
+    <script src="babel.min.js"></script>
+</head>
+<body>
+    <!-- <div id="example"></div>
+
+    <script type='text/babel'>
+        function formatName(user){
+            return user.firstName + ' ' + user.lastName;
+        }
+
+        function getGreeting(user){
+            if(user){
+                return <h1> hello, {formatName(user)}</h1>
+            }
+            return <h1> hello, stranger </h1>
+        }
+
+        const user = {
+            firstName: 'Harper',
+            lastName: 'perez'
+        }
+
+        const name = 'hello world'
+        const element = (  // 注意返回结果必须为一个标签
+            <div>
+                // 在下面的例子中，我们声明了一个名为 name 的变量，然后在 JSX 中使用它，并将它包裹在大括号
+                <h1>HAHA, {name}</h1>  
+                <h1>Hello, {formatName(user)}</h1>
+            </div>
+        )
+        
+        // 在 JSX 语法中，你可以在大括号内放置任何有效的 JavaScript 表达式。
+        // 例如，2 + 2，user.firstName 或 formatName(user) 都是有效的 JavaScript 表达式。
+        ReactDOM.render(
+            element,
+            document.getElementById('example')
+        )
+    </script> -->
+
+
+    <!-- jsx特定属性 -->
+    <div id="root"></div>
+
+    <script type='text/babel'>
+        const element = <div tabIndex="0">123</div>  // 可以使用引号
+        const element2 = <img src="{user.avatarUrl}" alt=""/>  // 
+
+        // 下面两种代码完全等效
+        const elementA = (
+            <h1 className='greeting'>hello, world</h1>
+        );
+        const elementB = React.createElement(
+            'h1',
+            {className: 'greeting'},
+            'Hello world'
+        )
+        ReactDOM.render(
+            // element, 
+            // elementA, 
+            elementB, 
+            document.getElementById('root')
+        )
+
+    </script>
+
+
+</body>
+</html>
