@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <title>Document</title>
+    <script src="js/react.js"></script>
+    <script src="js/react-dom.js"></script>
+    <script src="js/babel.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type='text/babel'>
+        // 我们可以把两者结合起来，使 React 的 state 成为“唯一数据源”。
+        // 渲染表单的 React 组件还控制着用户输入过程中表单发生的操作。
+        // 被 React 以这种方式控制取值的表单输入元素就叫做“受控组件”
+        // 例如，如果我们想让前一个示例在提交时打印出名称， 我们可以将表单写为受控组件
+
+        class NameForm extends React.Component{
+            constructor(args){
+                super(args);
+                this.state = {
+                    value: ''
+                }
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+            handleChange(event){
+                this.setState({value: event.target.value.toUpperCase()});
+            }
+            handleSubmit(event){
+                alert('提交的名字'+this.state.value);
+                event.preventDefault();
+            }
+            // 由于在表单元素上设置了 value 属性，因此显示的值将始终为 this.state.value，
+            // 这使得 React 的 state 成为唯一数据源。由于 handlechange 在每次按键时都会执行并更新 React 的 state，
+            // 因此显示的值将随着用户输入而更新
+            render(){
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            名字：
+                            <input type="text" value={this.state.value} onChange={this.handleChange} />
+
+                        </label>
+                        <input type="submit" value='提交' />
+                    </form>
+                );
+            }
+        }
+
+        // ReactDOM.render(
+        //     <NameForm/>,
+        //     document.getElementById('root')
+        // )
+
+        // textarea 标签
+        // 在 React 中，<textarea> 使用 value 属性代替
+        class EssayForm extends React.Component{
+            constructor(args){
+                super(args);
+
+                // this.state.value 初始化于构造函数中，因此文本区域默认有初值
+                this.state = {
+                    value: '请撰写一篇关于你喜欢的 DOM 元素的文章.'
+                }
+
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+
+            handleChange(event){
+                this.setState({value: event.target.value})
+            }
+
+            handleSubmit(event){
+                alert('提交的文章'+this.state.value);
+                event.preventDefault();
+            }
+
+            render(){
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            文章：
+                            <textarea value={this.state.value} onChange={this.handleChange}/>
+                        </label>
+                        <input type="submit" value='提交' />
+                    </form>
+                )
+            }
+        }
+
+        // select 标签
+        // 由于 selected 属性的缘故，椰子选项默认被选中。
+        // React 并不会使用 selected 属性，而是在根 select 标签上使用 value 属性。
+        // 这在受控组件中更便捷，因为您只需要在根标签中更新它
+
+        class FlavorForm  extends React.Component{
+            constructor(args){
+                super(args),
+                this.state = {
+                    value: 'coconut'
+                }
+
+                this.handleChange = this.handleChange.bind(this);
+                this.handleSubmit = this.handleSubmit.bind(this);
+            }
+            handleChange(event){
+                this.setState({
+                    value: event.target.value
+                })
+            }
+            
+            handleSubmit(event){
+                alert('你喜欢的风味是 '+ this.state.value);
+                event.preventDefault();
+            }
+
+            render(){
+                return (
+                    <form onSubmit={this.handleSubmit}>
+                        <label>
+                            选择你喜欢的风味:
+                            <select value={this.state.value} onChange={this.handleChange}>
+                                <option value="grapefruit">葡萄柚</option>
+                                <option value="lime">酸橙</option>
+                                <option value="coconut">椰子</option>
+                                <option value="mongo">芒果</option>
+                            </select>
+                        </label>
+                        <input type="submit" value='提交'/>
+                    </form>
+                );
+            }
+        }
+
+        // <input type="text">, <textarea> 和 <select> 之类的标签都非常相似—
+        // 它们都接受一个 value 属性，你可以使用它来实现受控组件
+        // ReactDOM.render(
+        //     // <EssayForm/>,
+        //     <FlavorForm />,
+        //     document.getElementById('root')
+        // )
+
+        // 文件input标签
+        // 它的 value 只读，所以它是 React 中的一个非受控组件 
+
+        class Reservation extends React.Component {
+            constructor(args){
+                super(args);
+                this.state = {
+                    isGoing: true,
+                    numberOfGuests: 2
+                }
+
+                this.handleInputChange = this.handleInputChange.bind(this);
+            }
+
+            handleInputChange(event){
+                const target = event.target;
+                const value = target.type == 'checkbox'? target.checked: target.value;
+                const name = target.name;
+                
+                console.log(target);
+                console.log(name, "========")
+                //   {[name]: value} 新给定输入名称对应的 state 值
+            
+                this.setState({
+                    // name: value  // error 更新name的值
+                    [name]: value // ok
+                })
+                console.log(this.state, '=====')
+            }
+
+            render(){
+                return (
+                    <form>
+                        <label>
+                            参与:
+                            <input name='isGoing' type="checkbox" 
+                                checked={this.state.isGoing}
+                                onChange={this.handleInputChange}
+                            />
+                        </label>
+                        <br/>
+                        <label>
+                            来宾人数：
+                            <input name='numberOfGuests' type="number" 
+                                value={this.state.numberOfGuests}
+                                onChange={this.handleInputChange}
+                            />
+                        </label>
+                    </form>
+                );
+            }
+        }
+
+        // 关于处理多个输入的情况
+        // ReactDOM.render(
+        //     <Reservation/>,
+        //     document.getElementById('root')
+        // )
+
+        // 在受控组件上指定 value 的 prop 可以防止用户更改输入。
+        // 如果指定了 value，但输入仍可编辑，则可能是意外地将value 设置为 undefined 或 null
+        ReactDOM.render(<input value={null} />, document.getElementById('root'));
+        
+    </script>
+</body>
+</html>
